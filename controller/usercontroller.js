@@ -1,4 +1,4 @@
-const User = require('../model/userModel');
+const User = require('../model/User');
 // Create a new user
 exports.createuser = async(req,res)=>{
     try{
@@ -34,7 +34,7 @@ exports.getuserbyid = async(req,res)=>{
 }
 
 // Update a user by ID
-exports.updateuserbyid = async(req,res)=>{
+exports.updateuser = async(req,res)=>{
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!user) {
@@ -47,7 +47,7 @@ exports.updateuserbyid = async(req,res)=>{
 }
 
 // Delete a user by ID
-exports.deleteuserbyid = async(req,res)=>{
+exports.deleteuser = async(req,res)=>{
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {

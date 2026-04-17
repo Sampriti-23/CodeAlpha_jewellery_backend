@@ -1,4 +1,4 @@
-const Product = require('../models/productmodel');
+const Product = require('../model/Product');
 // Create a new product
 exports.createproduct = async(req,res)=>{
     try{
@@ -35,7 +35,7 @@ exports.getproductbyid = async(req  ,res)=>{
 }
 
 // Update a product by ID
-exports.updateproductbyid = async(req,res)=>{
+exports.updateproduct = async(req,res)=>{
     try {
         const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!product) {
@@ -48,7 +48,7 @@ exports.updateproductbyid = async(req,res)=>{
 }
 
 // Delete a product by ID   
-exports.deleteproductbyid = async(req,res)=>{
+exports.deleteproduct = async(req,res)=>{
     try {
         const product = await Product.findByIdAndDelete(req.params.id);
 

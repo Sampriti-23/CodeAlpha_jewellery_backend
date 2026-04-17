@@ -1,4 +1,4 @@
-const Order = require('../models/order');
+const Order = require('../model/Order');
 
 // Create a new order
 exports.createorder = async(req,res)=>{
@@ -35,7 +35,7 @@ exports.getorderbyid = async(req,res)=>{
 }
 
 // Update an order by ID
-exports.updateorderbyid = async(req,res)=>{
+exports.updateorder = async(req,res)=>{
     try {
         const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!order) {
@@ -48,7 +48,7 @@ exports.updateorderbyid = async(req,res)=>{
 }
 
 // Delete an order by ID
-exports.deleteorderbyid = async(req ,res)=>{
+exports.deleteorder = async(req ,res)=>{
     try {
         const order = await Order.findByIdAndDelete(req.params.id);
         if (!order) {
