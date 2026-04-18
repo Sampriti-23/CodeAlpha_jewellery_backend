@@ -1,13 +1,14 @@
 const User = require("../model/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = require("../utils/config");
 
 // User Registration
 exports.register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, phone, email, password } = req.body;
 
-    if(!name || !email || !password) {
+    if(!name || !phone || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -22,6 +23,7 @@ exports.register = async (req, res) => {
     const user = await User.create({
         name,
         email,
+        phone,
         password: passwordHash
     });
     res.status(201).json({
@@ -64,6 +66,7 @@ exports.login = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
+        phone: user.phone,
         email: user.email,
         role: user.role,
         
