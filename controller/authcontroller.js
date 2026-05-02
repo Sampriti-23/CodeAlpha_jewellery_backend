@@ -2,6 +2,7 @@ const User = require("../model/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../utils/config");
+const { ADMIN_EMAIL, ADMIN_PASSWORD } = require("../utils/config");
 
 // User Registration
 exports.register = async (req, res) => {
@@ -36,7 +37,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// User Login
+// user login
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -55,7 +56,7 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      { userId: user._id, isAdmin: user.isAdmin ,email: user.email},
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
@@ -76,3 +77,27 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+//admin registration
+// exports.register_admin = async (req, res) => {
+//   try {
+
+//      const salt = await bcrypt.genSalt(10);
+//     const passwordHash = await bcrypt.hash("12345678", salt);
+
+//     const user = await User.create({
+//         name: "Admin",
+//         email:"admin@yopmail.com",
+//         password: passwordHash,
+//         isAdmin: true,
+//     });
+//     res.status(201).json({
+//          message: "User registered successfully",
+//          userid : user._id,
+//          status_code:201
+//         });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
