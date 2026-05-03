@@ -80,24 +80,24 @@ exports.login = async (req, res) => {
 
 
 //admin registration
-// exports.register_admin = async (req, res) => {
-//   try {
+ exports.register_admin = async (req, res) => {
+  try {
 
-//      const salt = await bcrypt.genSalt(10);
-//     const passwordHash = await bcrypt.hash("12345678", salt);
+      const salt = await bcrypt.genSalt(10);
+     const passwordHash = await bcrypt.hash("12345678", salt);
 
-//     const user = await User.create({
-//         name: "Admin",
-//         email:"admin@yopmail.com",
-//         password: passwordHash,
-//         isAdmin: true,
-//     });
-//     res.status(201).json({
-//          message: "User registered successfully",
-//          userid : user._id,
-//          status_code:201
-//         });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
+     const user = await User.create({
+         name: "Admin",
+         email:"admin@yopmail.com",
+         password: passwordHash,
+         isAdmin: true,
+     });
+     res.status(201).json({
+          message: "User registered successfully",
+          userid : user._id,
+          status_code:201
+         });
+   } catch (error) {
+     res.status(500).json({ error: error.message });
+   }
+ };
