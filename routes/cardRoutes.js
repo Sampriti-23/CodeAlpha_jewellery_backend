@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const cardcontroller = require('../controller/cartcontroller');
+const cartcontroller = require('../controller/cartcontroller');
 
-// Create a new card
-router.post('/newcart', cardcontroller.addtocart);
-// Get a specific card by ID
-router.get('/getcartsbyid/:id', cardcontroller.getcartbyid);
-//update a card
-router.put('/updatecarts/:id', cardcontroller.updatecart);
-// Delete a cardrouter
-router.delete('/deletecarts/:id', cardcontroller.deletecart);
+// Create a new cart
+router.post('/newcart', cartcontroller.addtocart);
+// Get a specific cart by ID
+router.get('/getcartsbyid/:id', cartcontroller.getcartbyid);
+//update a cart
+router.put('/updatecarts/:id', cartcontroller.updatecart);
+// Delete a cart
+router.delete('/deletecarts/:id', cartcontroller.deletecart);
 
 module.exports = router;

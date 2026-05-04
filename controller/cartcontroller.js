@@ -42,13 +42,14 @@ exports.addtocart = async (req, res) => {
 }
 
 // Get cart by User ID
+// Get cart by User ID
 exports.getcartbyid = async (req, res) => {
     try {
-        // We use populate here so the frontend can see the live name & price!
-        const cart = await Cart.findOne({ user: req.params.userId }).populate('cartItems.product');
+        // 🔥 FIX: Changed req.params.userId to req.params.id to match your route!
+        const cart = await Cart.findOne({ user: req.params.id }).populate('cartItems.product');
         
         if (!cart) {
-            return res.status(200).json({ cartItems: [] }); // Return empty cart if none exists
+            return res.status(200).json({ cartItems: [] }); 
         }
         res.status(200).json(cart);
     } catch (error) {
@@ -80,7 +81,8 @@ exports.updatecart = async (req, res) => {
 // Clear or delete the whole cart manually
 exports.deletecart = async (req, res) => {
     try {
-        const cart = await Cart.findOneAndDelete({ user: req.params.userId });
+        // 🔥 FIX: Changed req.params.userId to req.params.id
+        const cart = await Cart.findOneAndDelete({ user: req.params.id });
         if (!cart) {
             return res.status(404).json({ message: "Cart not found" });
         }
