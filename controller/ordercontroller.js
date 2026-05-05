@@ -107,3 +107,15 @@ exports.deleteorder = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 }
+
+// Get all orders for a specific user (For the User Panel)
+// Get all orders for a specific user
+exports.getuserorders = async (req, res) => {
+    try {
+        // 🔥 FIX: Changed userId to id to match your route!
+        const orders = await Order.find({ user: req.params.user }).sort({ createdAt: -1 });
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}

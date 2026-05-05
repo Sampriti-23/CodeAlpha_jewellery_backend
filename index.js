@@ -1,33 +1,58 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const cors= require("cors");
+const cors = require("cors");
+
 const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const cartRoutes = require("./routes/cardRoutes");
+const wishlistRoutes = require('./routes/wishlistRoutes');
 
 dotenv.config();
+
 const app = express();
-// app.use(cors());
-app.use(cors({
-  origin: "http://localhost:5173", // Trust your frontend
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "Domain"], // <-- Explicitly allow 'Domain'
-  credentials: true
-}));
+
+// 🔥 CORS FIX (supports multiple frontend ports)
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174"
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+// 🔥 Parse JSON
 app.use(express.json());
 
-// Connect to MongoDB
+// 🔥 Connect DB
 connectDB();
 
+// 🔥 Routes
 app.use("/api/user", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
-app.use('/api/cart', cartRoutes);
+app.use("/api/cart", cartRoutes);
+app.use('/api/wishlist', wishlistRoutes);
 
-
+// 🔥 Server start
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
