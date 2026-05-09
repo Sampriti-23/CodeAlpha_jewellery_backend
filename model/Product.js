@@ -14,7 +14,7 @@ const productSchema = new mongoose.Schema({
     type: String, 
     required: true,
     // ENUM restricts the input to only these exact strings
-    enum: ['Ring', 'Necklace', 'Earrings', 'Bracelet', 'Pendant', 'Other'] 
+    enum: ['Ring', 'Necklace', 'Earrings', 'Bracelet', 'Pendant'] 
   },
   
   countInStock: { type: Number, required: true, default: 0 },

@@ -81,13 +81,39 @@ exports.updatecart = async (req, res) => {
 // Clear or delete the whole cart manually
 exports.deletecart = async (req, res) => {
     try {
-        // 🔥 FIX: Changed req.params.userId to req.params.id
-        const cart = await Cart.findOneAndDelete({ user: req.params.id });
+
+        const { id, productId } = req.params;
+
+        const cart = await Cart.findOne({ user: id });
+
         if (!cart) {
-            return res.status(404).json({ message: "Cart not found" });
+            return res.status(404).json({
+                message: "Cart not found"
+            });
         }
-        res.status(200).json({ message: "Cart deleted successfully" });
+
+        // REMOVE ONLY SELECTED PRODUCT
+
+        cart.cartItems = cart.cartItems.filter(
+            (item) =>
+                item.product.toString() !== productId
+        );
+
+        await cart.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Product removed from cart",
+            cart
+        });
+
     } catch (error) {
-        res.status(400).json({ message: error.message });
+
+        console.log(error);
+
+        res.status(400).json({
+            message: error.message
+        });
+
     }
 }

@@ -9,6 +9,6 @@ router.get('/getcartsbyid/:id', cartcontroller.getcartbyid);
 //update a cart
 router.put('/updatecarts/:id', cartcontroller.updatecart);
 // Delete a cart
-router.delete('/deletecarts/:id', cartcontroller.deletecart);
+router.delete('/deletecarts/:id/:productId', cartcontroller.deletecart);
 
 module.exports = router;
