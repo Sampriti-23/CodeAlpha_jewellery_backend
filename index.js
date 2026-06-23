@@ -21,6 +21,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "https://codealpha-jewellery-userfrontned.onrender.com",
+  "https://codealpha-jewellery-adminfrontned.onrender.com",
 ];
 
 app.use(
