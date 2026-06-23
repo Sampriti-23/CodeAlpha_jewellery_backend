@@ -9,7 +9,7 @@ exports.createproduct = async (req, res) => {
         // 🔥 If Multer caught the image, it will be sitting in req.file
         if (req.file) {
             // Create the full URL. Make sure your server is running on port 8000!
-            imageUrl = `http://localhost:8000/uploads/${req.file.filename}`;
+            imageUrl = `https://codealpha-jewellery-backend.onrender.com/uploads/${req.file.filename}`;
         }
 
         const newProduct = await Product.create({
