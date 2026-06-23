@@ -19,7 +19,8 @@ const app = express();
 // 🔥 CORS FIX (supports multiple frontend ports)
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:5174"
+  "http://localhost:5174",
+  "https://codealpha-jewellery-userfrontned.onrender.com/",
 ];
 
 app.use(
