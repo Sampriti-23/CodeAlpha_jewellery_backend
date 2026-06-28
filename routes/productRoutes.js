@@ -11,7 +11,8 @@ router.get("/getallproducts", productcontroller.getallproduct);
 router.get("/productsbyid/:id", productcontroller.getproductbyid);
 
 // Update a product by ID
-router.put("/updateproducts/:id", productcontroller.updateproduct);
+router.put("/updateproducts/:id",upload.single("image"), productcontroller.updateproduct);
+router.post("/updateproducts/:id", upload.single("image"), productcontroller.updateproduct);
 
 // Delete a product by ID
 router.delete("/deleteproducts/:id", productcontroller.deleteproduct);

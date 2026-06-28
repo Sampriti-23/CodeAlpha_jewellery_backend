@@ -9,7 +9,7 @@ exports.createproduct = async (req, res) => {
         // 🔥 If Multer caught the image, it will be sitting in req.file
         if (req.file) {
             // Create the full URL. Make sure your server is running on port 8000!
-            imageUrl = `https://codealpha-jewellery-backend.onrender.com/uploads/${req.file.filename}`;
+            imageUrl = `/uploads/${req.file.filename}`;
         }
 
         const newProduct = await Product.create({
@@ -53,17 +53,60 @@ exports.getproductbyid = async(req  ,res)=>{
 }
 
 // Update a product by ID
-exports.updateproduct = async(req,res)=>{
+// Update a product by ID
+exports.updateproduct = async (req, res) => {
     try {
-        const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!product) {
-            return res.status(404).json({ message: "Product not found" });
+        console.log("📥 Incoming Update Body:", req.body);
+        console.log("🆔 Target Product ID:", req.params.id);
+        console.log("📁 Incoming File:", req.file);
+
+        // Map and parse fields explicitly to prevent schema validation casting failures
+        const updateData = {
+            name: req.body.name,
+            description: req.body.description,
+            category: req.body.category,
+        };
+
+        // Convert incoming stringified numbers safely into real numbers
+        if (req.body.price !== undefined) {
+            updateData.price = Number(req.body.price);
         }
+        if (req.body.countInStock !== undefined) {
+            updateData.countInStock = Number(req.body.countInStock);
+        }
+
+        // If a new replacement file image was captured by Multer
+        if (req.file) {
+            updateData.image = `https://codealpha-jewellery-backend.onrender.com/uploads/${req.file.filename}`;
+        }
+
+        const product = await Product.findByIdAndUpdate(
+            req.params.id,
+            updateData,
+            {
+                new: true,          // Return the fresh updated document
+                runValidators: true // Enforce schema rules
+            }
+        );
+
+        if (!product) {
+            console.log("❌ Product not found in Database for ID:", req.params.id);
+            return res.status(404).json({
+                message: "Product not found",
+            });
+        }
+
+        console.log("✅ Product Updated Successfully in DB:", product);
         res.status(200).json(product);
+
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        // 🔍 Look at your Render or local console logs for this:
+        console.error("❌ BACKEND UPDATE CRASH ERROR:", error.message);
+        res.status(400).json({
+            message: error.message,
+        });
     }
-}
+};
 
 // Delete a product by ID   
 exports.deleteproduct = async(req,res)=>{
