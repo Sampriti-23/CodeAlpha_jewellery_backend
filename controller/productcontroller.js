@@ -18,7 +18,7 @@ exports.createproduct = async (req, res) => {
             description,
             category,
             countInStock,
-            image: imageUrl // Save the URL to the database!
+            image: imageUrl // Save the URL to the database! 
         });
 
         res.status(201).json(newProduct);
