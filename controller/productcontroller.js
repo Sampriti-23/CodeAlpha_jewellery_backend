@@ -31,7 +31,7 @@ exports.createproduct = async (req, res) => {
 // Get all products
 exports.getallproduct = async(req,res)=>{
     try {
-        const products = await Product.find();
+        const products = await Product.find().sort({ createdAt: -1 });
         res.status(200).json(products);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -77,7 +77,7 @@ exports.updateproduct = async (req, res) => {
 
         // If a new replacement file image was captured by Multer
         if (req.file) {
-            updateData.image = `https://codealpha-jewellery-backend.onrender.com/uploads/${req.file.filename}`;
+            updateData.image = `/uploads/${req.file.filename}`;
         }
 
         const product = await Product.findByIdAndUpdate(
