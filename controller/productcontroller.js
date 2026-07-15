@@ -1,15 +1,14 @@
 const Product = require('../model/Product');
-// Create a new product
 
+// Create a new product
 exports.createproduct = async (req, res) => {
     try {
         const { name, price, description, category, countInStock } = req.body;
         let imageUrl = "";
 
-        // 🔥 If Multer caught the image, it will be sitting in req.file
+        // 🔥 If Multer and Cloudinary caught the image, the full live URL is in req.file.path
         if (req.file) {
-            // Create the full URL. Make sure your server is running on port 8000!
-            imageUrl = `/uploads/${req.file.filename}`;
+            imageUrl = req.file.path; 
         }
 
         const newProduct = await Product.create({
@@ -18,18 +17,18 @@ exports.createproduct = async (req, res) => {
             description,
             category,
             countInStock,
-            image: imageUrl // Save the URL to the database! 
+            image: imageUrl // Save the Cloudinary URL to the database! 
         });
 
         res.status(201).json(newProduct);
     } catch (error) {
-        // This is what is throwing the 500 error right now!
         console.log("Backend Error:", error); 
         res.status(500).json({ message: error.message });
     }
 };
+
 // Get all products
-exports.getallproduct = async(req,res)=>{
+exports.getallproduct = async (req, res) => {
     try {
         const products = await Product.find().sort({ createdAt: -1 });
         res.status(200).json(products);
@@ -39,7 +38,7 @@ exports.getallproduct = async(req,res)=>{
 }
 
 // Get a product by ID
-exports.getproductbyid = async(req  ,res)=>{
+exports.getproductbyid = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (!product) {
@@ -52,7 +51,6 @@ exports.getproductbyid = async(req  ,res)=>{
     }
 }
 
-// Update a product by ID
 // Update a product by ID
 exports.updateproduct = async (req, res) => {
     try {
@@ -75,9 +73,10 @@ exports.updateproduct = async (req, res) => {
             updateData.countInStock = Number(req.body.countInStock);
         }
 
-        // If a new replacement file image was captured by Multer
+        // If a new replacement file image was captured by Multer/Cloudinary
         if (req.file) {
-            updateData.image = `/uploads/${req.file.filename}`;
+            // Update the image field with the new Cloudinary URL
+            updateData.image = req.file.path;
         }
 
         const product = await Product.findByIdAndUpdate(
@@ -100,7 +99,6 @@ exports.updateproduct = async (req, res) => {
         res.status(200).json(product);
 
     } catch (error) {
-        // 🔍 Look at your Render or local console logs for this:
         console.error("❌ BACKEND UPDATE CRASH ERROR:", error.message);
         res.status(400).json({
             message: error.message,
@@ -109,7 +107,7 @@ exports.updateproduct = async (req, res) => {
 };
 
 // Delete a product by ID   
-exports.deleteproduct = async(req,res)=>{
+exports.deleteproduct = async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id);
 
