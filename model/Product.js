@@ -4,6 +4,7 @@ const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true, default: 0 },
+  salePrice: { type: Number, default: null },
   image: { 
         type: String, 
         required: false, // Set to false so you can still add products without images if you want to!

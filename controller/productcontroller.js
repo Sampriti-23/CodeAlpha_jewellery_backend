@@ -3,21 +3,21 @@ const Product = require('../model/Product');
 // Create a new product
 exports.createproduct = async (req, res) => {
     try {
-        const { name, price, description, category, countInStock } = req.body;
+        const { name, price, salePrice, description, category, countInStock } = req.body;
         let imageUrl = "";
 
-        // 🔥 If Multer and Cloudinary caught the image, the full live URL is in req.file.path
         if (req.file) {
             imageUrl = req.file.path; 
         }
-
+        const finalSalePrice = salePrice ? Number(salePrice) : null;
         const newProduct = await Product.create({
             name,
             price,
+            salePrice: finalSalePrice,
             description,
             category,
             countInStock,
-            image: imageUrl // Save the Cloudinary URL to the database! 
+            image: imageUrl
         });
 
         res.status(201).json(newProduct);
@@ -52,30 +52,33 @@ exports.getproductbyid = async (req, res) => {
 }
 
 // Update a product by ID
+// Update a product by ID
 exports.updateproduct = async (req, res) => {
     try {
         console.log("📥 Incoming Update Body:", req.body);
         console.log("🆔 Target Product ID:", req.params.id);
         console.log("📁 Incoming File:", req.file);
 
-        // Map and parse fields explicitly to prevent schema validation casting failures
         const updateData = {
             name: req.body.name,
             description: req.body.description,
             category: req.body.category,
         };
 
-        // Convert incoming stringified numbers safely into real numbers
         if (req.body.price !== undefined) {
             updateData.price = Number(req.body.price);
         }
         if (req.body.countInStock !== undefined) {
             updateData.countInStock = Number(req.body.countInStock);
         }
+        if (req.body.salePrice !== undefined) {
+            updateData.salePrice = (req.body.salePrice === "" || req.body.salePrice === null || req.body.salePrice === "null") 
+                ? null 
+                : Number(req.body.salePrice);
+        }
 
-        // If a new replacement file image was captured by Multer/Cloudinary
+       
         if (req.file) {
-            // Update the image field with the new Cloudinary URL
             updateData.image = req.file.path;
         }
 
@@ -83,8 +86,8 @@ exports.updateproduct = async (req, res) => {
             req.params.id,
             updateData,
             {
-                new: true,          // Return the fresh updated document
-                runValidators: true // Enforce schema rules
+                new: true,          
+                runValidators: true 
             }
         );
 
