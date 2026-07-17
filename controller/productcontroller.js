@@ -9,7 +9,9 @@ exports.createproduct = async (req, res) => {
         if (req.file) {
             imageUrl = req.file.path; 
         }
-        const finalSalePrice = salePrice ? Number(salePrice) : null;
+        const finalSalePrice = (salePrice && salePrice !== "null" && salePrice !== "") 
+            ? Number(salePrice) 
+            : null;
         const newProduct = await Product.create({
             name,
             price,
