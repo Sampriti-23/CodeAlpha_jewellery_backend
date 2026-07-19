@@ -6,7 +6,7 @@ const Product = require('../model/Product');
 exports.createorder = async (req, res) => {
     try {
         const { userId, clientName, shippingAddress } = req.body;
-
+        
         // 1. Get the user's cart
         const cart = await Cart.findOne({ user: userId }).populate('cartItems.product');
         if (!cart || cart.cartItems.length === 0) {
@@ -26,7 +26,7 @@ exports.createorder = async (req, res) => {
                 name: item.product.name,
                 qty: item.qty,
                 price: item.product.price,
-                product: item.product._id
+                product: item.product._id,
             });
         }
 
@@ -102,7 +102,7 @@ exports.deleteorder = async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
-        res.status(200).json({ message: "Order deleted successfully" });
+        res.status(200).json({ message: "Order cancelled successfully" });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
